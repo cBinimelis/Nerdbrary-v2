@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nerdbrary v2", "Nerdbrary v2\Nerdbrary v2.csproj", "{5526D24E-372A-4617-B1E9-FCBBE5668928}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdClassLibrary", "NerdClassLibrary\NerdClassLibrary.csproj", "{9AC80E89-076F-41C7-BD55-EB5971998EC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5526D24E-372A-4617-B1E9-FCBBE5668928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5526D24E-372A-4617-B1E9-FCBBE5668928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5526D24E-372A-4617-B1E9-FCBBE5668928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5526D24E-372A-4617-B1E9-FCBBE5668928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3512BA9D-6E34-4992-896D-5D8BD508D2FA}
+	EndGlobalSection
+EndGlobal
