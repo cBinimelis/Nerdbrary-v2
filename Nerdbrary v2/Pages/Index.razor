@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using NerdClassLibrary
+@using NerdClassLibrary.Modelos
+@inject IUsuarioData objUsuario
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +10,46 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@if(userObj!=null){
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var user in userObj)
+            {
+                <tr>
+                    <td>@user.IdUsuario</td>
+                    <td>@user.Nick</td>
+                    <td>@user.Imagen</td>
+                    <td>@user.Fondo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+@code{
+    IEnumerable<Usuario> userObj;
+    protected override async Task OnInitializedAsync()
+    {
+        userObj = await objUsuario.GetUsuarios();
+    }
+    private static async Task<IResult> GetUsuarios(IUsuarioData ud)
+    {
+        try
+        {
+            return Results.Ok(await ud.GetUsuarios());
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+}

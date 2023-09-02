@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace NerdClassLibrary.Data
 {
-    public class UsuarioData
+    public class UsuarioData : IUsuarioData
     {
         private readonly ISqlDataAccess _db;
-public UsuarioData(ISqlDataAccess db)
+        public UsuarioData(ISqlDataAccess db)
         {
             _db = db;
         }
@@ -26,5 +26,15 @@ public UsuarioData(ISqlDataAccess db)
 
             return result.FirstOrDefault();
         }
+
+        public Task InsertUsuario(Usuario usuario) =>
+            _db.SaveData(storedProcedure: "Usuario_Create", new
+            { usuario.Nick, usuario.Password, usuario.IdEstadoUsuario, usuario.IdTipoUsuario, usuario.Imagen, usuario.Fondo });
+
+        public Task UpdateUsuario(Usuario usuario) =>
+            _db.SaveData(storedProcedure: "Usuario_Update", usuario);
+
+        public Task DeleteUsuario(int id) =>
+            _db.SaveData(storedProcedure: "Usuario_Delete", new { Id = id });
     }
 }
