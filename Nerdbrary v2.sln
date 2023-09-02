@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nerdbrary v2", "Nerdbrary v2\Nerdbrary v2.csproj", "{5526D24E-372A-4617-B1E9-FCBBE5668928}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nerdbrary v2", "Nerdbrary v2\Nerdbrary v2.csproj", "{5526D24E-372A-4617-B1E9-FCBBE5668928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdClassLibrary", "NerdClassLibrary\NerdClassLibrary.csproj", "{9AC80E89-076F-41C7-BD55-EB5971998EC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdClassLibrary", "NerdClassLibrary\NerdClassLibrary.csproj", "{9AC80E89-076F-41C7-BD55-EB5971998EC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
