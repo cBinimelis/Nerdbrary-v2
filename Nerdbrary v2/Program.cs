@@ -9,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
+builder.Services.AddSingleton<IAnimeData, AnimeData>();
 
 var app = builder.Build();
 

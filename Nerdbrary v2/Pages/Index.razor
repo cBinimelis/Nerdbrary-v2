@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using NerdClassLibrary
 @using NerdClassLibrary.Modelos
-@inject IUsuarioData objUsuario
+@inject IUsuarioData usuData
 
 <PageTitle>Index</PageTitle>
 
@@ -11,7 +11,7 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-@if(userObj!=null){
+@if(usuEnum!=null){
     <table class="table">
         <thead>
             <tr>
@@ -22,10 +22,10 @@ Welcome to your new app.
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            @foreach (var user in userObj)
+            @foreach (var user in usuEnum)
             {
                 <tr>
-                    <td>@user.IdUsuario</td>
+                    <td>@user.Id_Usuario</td>
                     <td>@user.Nick</td>
                     <td>@user.Imagen</td>
                     <td>@user.Fondo</td>
@@ -33,23 +33,11 @@ Welcome to your new app.
             }
         </tbody>
     </table>
-
 }
 @code{
-    IEnumerable<Usuario> userObj;
+    IEnumerable<Usuario> usuEnum;
     protected override async Task OnInitializedAsync()
     {
-        userObj = await objUsuario.GetUsuarios();
-    }
-    private static async Task<IResult> GetUsuarios(IUsuarioData ud)
-    {
-        try
-        {
-            return Results.Ok(await ud.GetUsuarios());
-        }
-        catch (Exception ex)
-        {
-            return Results.Problem(ex.Message);
-        }
+        usuEnum = await usuData.GetUsuarios();
     }
 }

@@ -17,12 +17,12 @@ namespace NerdClassLibrary.Data
         }
 
         public Task<IEnumerable<Usuario>> GetUsuarios() =>
-            _db.LoadData<Usuario, dynamic>(storedProcedure: "GetUsuarios", new { });
+            _db.LoadData<Usuario, dynamic>(storedProcedure: "Usuarios_Get", new { });
 
         public async Task<Usuario?> GetUsuario(int id)
         {
             var result = await _db.LoadData<Usuario, dynamic>(
-                storedProcedure: "GetUsuario", new { Id = id });
+                storedProcedure: "Usuario_Get", new { Id = id });
 
             return result.FirstOrDefault();
         }

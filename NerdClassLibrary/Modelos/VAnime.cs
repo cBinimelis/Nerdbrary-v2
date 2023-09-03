@@ -5,7 +5,7 @@ namespace NerdClassLibrary.Modelos;
 
 public partial class VAnime
 {
-    public int IdAnime { get; set; }
+    public int Id_Anime { get; set; }
 
     public string Nombre { get; set; } = null!;
 

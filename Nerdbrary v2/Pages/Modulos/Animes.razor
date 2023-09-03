@@ -1,0 +1,63 @@
+﻿@page "/Anime"
+@using NerdClassLibrary
+@using NerdClassLibrary.Modelos
+@inject IAnimeData aniData
+
+<h3>Anime</h3>
+
+
+@if (aniEnum != null)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+
+        @foreach (var ani in aniEnum)
+        {
+            <div class="g-3">
+            <div class="row g-0 bg-body-secondary position-relative rounded">
+                <div class="col-md-6 mb-md-0 p-md-2">
+                    <div class="ratio ratio-1x1">
+                            <img src="img/anime/@ani.Imagen" class="object-fit-cover border rounded" alt="Imagen de @ani.Nombre">
+                    </div>
+                </div>
+                <div class="col-md-6 p-4 ps-md-0">
+                    <h5 class="card-title">@ani.Nombre</h5>
+                    <p>Another instance of placeholder content for this other custom component. It is intended to mimic what some real-world content would look like.</p>
+                    <a href="/Anime/#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+            </div>
+        }
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Genero</th>
+                <th scope="col">Imagen</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var ani in aniEnum)
+            {
+                <tr>
+                    <td>@ani.Id_Anime</td>
+                    <td>@ani.Nombre</td>
+                    <td>@ani.Genero</td>
+                    <td>@ani.Imagen</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    IEnumerable<VAnime> aniEnum;
+    protected override async Task OnInitializedAsync()
+    {
+        aniEnum = await aniData.GetAnimes();
+    }
+
+}

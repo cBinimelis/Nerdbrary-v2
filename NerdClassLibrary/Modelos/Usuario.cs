@@ -5,7 +5,7 @@ namespace NerdClassLibrary.Modelos;
 
 public partial class Usuario
 {
-    public int IdUsuario { get; set; }
+    public int Id_Usuario { get; set; }
 
     public string Nick { get; set; } = null!;
 
