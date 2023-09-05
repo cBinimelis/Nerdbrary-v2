@@ -1,6 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Nerdbrary v2</a>
+﻿<div class="top-row ps-3 navbar navbar-dark h-auto">
+    <div class="p-2">
+        <a class="navbar-brand" href="">
+            <img src="img/Logo.png" class="img-fluid" />
+        </a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,7 +13,7 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Inicio
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -21,7 +23,7 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Mangas
             </NavLink>
         </div>
     </nav>

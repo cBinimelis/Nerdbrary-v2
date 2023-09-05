@@ -5,6 +5,17 @@
 
 <h3>Anime</h3>
 
+<div class="g-3">
+    <div class="row g-0 p-4 bg-body-secondary position-relative rounded">
+        <h4>Ingresar nuevo Anime</h4>
+        <EditForm Model="@anime" OnValidSubmit="@InsertAnime">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Nombre:</label>
+            <InputText class="form-text" id="Nombre" @bind-Value="anime.Nombre" />
+        </EditForm>
+    </div>
+</div>
 
 @if (aniEnum != null)
 {
@@ -13,18 +24,18 @@
         @foreach (var ani in aniEnum)
         {
             <div class="g-3">
-            <div class="row g-0 bg-body-secondary position-relative rounded">
-                <div class="col-md-6 mb-md-0 p-md-2">
-                    <div class="ratio ratio-1x1">
+                <div class="row g-0 bg-body-secondary position-relative rounded">
+                    <div class="col-md-6 mb-md-0 p-md-2">
+                        <div class="ratio ratio-1x1">
                             <img src="img/anime/@ani.Imagen" class="object-fit-cover border rounded" alt="Imagen de @ani.Nombre">
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-4 ps-md-0">
+                        <h5 class="card-title">@ani.Nombre</h5>
+                        <p>Another instance of placeholder content for this other custom component. It is intended to mimic what some real-world content would look like.</p>
+                        <a href="/Anime/#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
-                <div class="col-md-6 p-4 ps-md-0">
-                    <h5 class="card-title">@ani.Nombre</h5>
-                    <p>Another instance of placeholder content for this other custom component. It is intended to mimic what some real-world content would look like.</p>
-                    <a href="/Anime/#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
             </div>
         }
     </div>
@@ -55,9 +66,24 @@
 
 @code {
     IEnumerable<VAnime> aniEnum;
+    Anime anime = new Anime();
     protected override async Task OnInitializedAsync()
     {
         aniEnum = await aniData.GetAnimes();
     }
 
+    private async Task InsertAnime()
+    {
+        try
+        {
+            anime.Activo = true;
+            await aniData.InsertAnime(anime);
+            aniEnum = await aniData.GetAnimes();
+            anime = new Anime();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 }
