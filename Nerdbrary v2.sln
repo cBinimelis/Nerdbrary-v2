@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nerdbrary v2", "Nerdbrary v
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdClassLibrary", "NerdClassLibrary\NerdClassLibrary.csproj", "{9AC80E89-076F-41C7-BD55-EB5971998EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdMinimalAPI", "Nerd API\NerdMinimalAPI.csproj", "{CD608A42-FB9B-4550-BA5B-A43225BD7A7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdAPI", "NerdAPI\NerdAPI.csproj", "{FBF86DAB-A2FD-47FA-930A-C96A92FB3FE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AC80E89-076F-41C7-BD55-EB5971998EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD608A42-FB9B-4550-BA5B-A43225BD7A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD608A42-FB9B-4550-BA5B-A43225BD7A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD608A42-FB9B-4550-BA5B-A43225BD7A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD608A42-FB9B-4550-BA5B-A43225BD7A7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBF86DAB-A2FD-47FA-930A-C96A92FB3FE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBF86DAB-A2FD-47FA-930A-C96A92FB3FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBF86DAB-A2FD-47FA-930A-C96A92FB3FE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBF86DAB-A2FD-47FA-930A-C96A92FB3FE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
