@@ -1,4 +1,5 @@
-using NerdClassLibrary.DbAccess;
+global using NerdAPI.Modelos;
+global using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
-builder.Services.AddSingleton<IAnimeData, AnimeData>();
+builder.Services.AddDbContext<NerdContext>();
 
 var app = builder.Build();
 

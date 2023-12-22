@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /Nerdbrary v2/appsettings.json
 /Nerd API/appsettings.json
 /NerdAPI/appsettings.json
+/NerdAPI/Modelos/NerdContext.cs
