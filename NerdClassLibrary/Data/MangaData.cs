@@ -27,9 +27,23 @@ namespace NerdClassLibrary.Data
             return result.FirstOrDefault();
         }
 
-        //TODO - Insert Manga
+        public Task InsertManga(Manga Manga) =>
+            _db.SaveData(storedProcedure: "Manga_Create", new{
+                Manga.Nombre,
+                Manga.Sinopsis,
+                Manga.Lanzamiento,
+                Manga.Tomos,
+                Manga.Imagen,
+                Manga.IdGeneroManga,
+                Manga.OtrosGeneros,
+                Manga.IdEstadoManga,
+                Manga.Activo
+            });
 
         public Task UpdateManga(Manga Manga) =>
             _db.SaveData(storedProcedure: "Manga_Update", Manga);
+
+        public Task DeleteManga(int id) =>
+            _db.SaveData(storedProcedure: "Manga_Delete", new { Id = id});
     }
 }

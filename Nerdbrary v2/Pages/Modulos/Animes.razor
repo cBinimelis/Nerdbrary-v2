@@ -1,6 +1,4 @@
-﻿@page "/Anime"
-@using NerdClassLibrary
-@using NerdClassLibrary.Modelos
+﻿@page "/Animes"
 @inject IAnimeData aniData
 
 <h3>Anime</h3>
@@ -53,6 +51,7 @@
 @code {
     IEnumerable<VAnime> aniEnum;
     Anime anime = new Anime();
+
     protected override async Task OnInitializedAsync()
     {
         aniEnum = await aniData.GetAnimes();

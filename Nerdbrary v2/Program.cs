@@ -5,11 +5,14 @@ using NerdClassLibrary.DbAccess;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
 builder.Services.AddSingleton<IAnimeData, AnimeData>();
+//http Client
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -26,7 +29,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

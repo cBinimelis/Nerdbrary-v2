@@ -1,0 +1,55 @@
+﻿@page "/Anime/{Id:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h1>Editar Anime</h1>
+
+<EditForm Model="@anime" OnValidSubmit="@UpdateAnime">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <InputText id="nombre" class="form-control" @bind-Value="anime.Nombre" />
+        <ValidationMessage For="@(() => anime.Nombre)" />
+    </div>
+    <div class="form-group">
+        <label for="precio">Precio</label>
+        <InputNumber id="precio" class="form-control" @bind-Value="anime.Imagen" />
+        <ValidationMessage For="@(() => anime.Imagen)" />
+    </div>
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <InputTextArea id="descripcion" class="form-control" @bind-Value="anime.Sinopsis" />
+        <ValidationMessage For="@(() => anime.Sinopsis)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Anime anime = new Anime();
+
+    protected override async Task OnInitializedAsync()
+    {
+        anime = await Http.GetFromJsonAsync<Anime>($"https://localhost:7130/api/Anime/{Id}");
+    }
+
+    private async Task UpdateAnime()
+    {
+        var response = await Http.PutAsJsonAsync($"https://localhost:7130/api/Anime/{Id}", anime);
+        if (response.IsSuccessStatusCode)
+        {
+            var message = await response.Content.ReadFromJsonAsync<string>();
+            Console.WriteLine(message);
+            Navigation.NavigateTo("/Anime");
+        }
+        else
+        {
+            var error = await response.Content.ReadFromJsonAsync<string>();
+            Console.WriteLine(error);
+        }
+    }
+}

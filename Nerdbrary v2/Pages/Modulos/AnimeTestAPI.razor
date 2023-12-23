@@ -1,0 +1,54 @@
+@page "/Anime"
+@inject HttpClient Http
+
+<h1>Animes</h1>
+
+@if (animes == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Capitulos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ani in animes)
+            {
+                @if (top < 20)
+                {
+                    <tr>
+                        <td>@ani.Id_Anime</td>
+                        <td>@ani.Nombre</td>
+                        <td>@ani.Genero</td>
+                        <td>@ani.Capitulos</td>
+                        <td>
+                            <a href="Anime/@ani.Id_Anime" class="btn btn-warning">Editar</a>
+                            <button class="btn btn-danger">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+                top++;
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private VAnime[]? animes;
+    int top = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        animes = await Http.GetFromJsonAsync<VAnime[]>("https://localhost:7130/api/Anime");
+    }
+
+
+
+}
