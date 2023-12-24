@@ -1,55 +1,49 @@
-﻿@page "/Anime/{Id:int}"
-@inject HttpClient Http
-@inject NavigationManager Navigation
+﻿@page "/Animes/edit"
+@page "/Animes/edit/{Id_Anime:int}"
+@inject IAnimeData aniData
 
-<h1>Editar Anime</h1>
+@if (Id_Anime is null)
+{
+    <PageTitle>Agregar un nuevo anime</PageTitle>
+    <h3>Agregar un nuevo anime</h3>
+}
+else
+{
+    <PageTitle>Editar "@CurrentAnime.Nombre"</PageTitle>
+    <h3>Editar "@CurrentAnime.Nombre"</h3>
+}
 
-<EditForm Model="@anime" OnValidSubmit="@UpdateAnime">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <InputText id="nombre" class="form-control" @bind-Value="anime.Nombre" />
-        <ValidationMessage For="@(() => anime.Nombre)" />
+<EditForm Model="CurrentAnime" OnSubmit="HandleSubmit" FormName="AnimeForm">
+    <div>
+        <label for="name">Nombre</label>
+        <InputText id="name" @bind-Value="CurrentAnime.Nombre" class="form-control" />
     </div>
-    <div class="form-group">
-        <label for="precio">Precio</label>
-        <InputNumber id="precio" class="form-control" @bind-Value="anime.Imagen" />
-        <ValidationMessage For="@(() => anime.Imagen)" />
-    </div>
-    <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <InputTextArea id="descripcion" class="form-control" @bind-Value="anime.Sinopsis" />
-        <ValidationMessage For="@(() => anime.Sinopsis)" />
-    </div>
-    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <button type="submit" class="btn btn-primary">Guardar</button>
 </EditForm>
+
 
 @code {
     [Parameter]
-    public int Id { get; set; }
+    public int? Id_Anime { get; set; } = null;
 
-    Anime anime = new Anime();
+    [SupplyParameterFromForm]
+    public Anime CurrentAnime { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        anime = await Http.GetFromJsonAsync<Anime>($"https://localhost:7130/api/Anime/{Id}");
-    }
-
-    private async Task UpdateAnime()
-    {
-        var response = await Http.PutAsJsonAsync($"https://localhost:7130/api/Anime/{Id}", anime);
-        if (response.IsSuccessStatusCode)
+        if(Id_Anime is not null)
         {
-            var message = await response.Content.ReadFromJsonAsync<string>();
-            Console.WriteLine(message);
-            Navigation.NavigateTo("/Anime");
-        }
-        else
-        {
-            var error = await response.Content.ReadFromJsonAsync<string>();
-            Console.WriteLine(error);
+            int id = Convert.ToInt32(Id_Anime);
+            var anime = await aniData.GetAnime(id);
+            if(anime is not null)
+            {
+                CurrentAnime.Nombre ??= anime.Nombre;
+            }
         }
     }
+
+    async Task HandleSubmit(){
+
+    }
+
 }

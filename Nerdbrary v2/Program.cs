@@ -14,6 +14,7 @@ builder.Services.AddSingleton<IAnimeData, AnimeData>();
 //http Client
 builder.Services.AddHttpClient();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,8 +30,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+//app.MapBlazorHub();
+//app.MapFallbackToPage("/_Host");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapBlazorHub();
+    endpoints.MapRazorPages();
+    endpoints.MapFallbackToPage("/_Host");
+});
+
 
 app.Run();

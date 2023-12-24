@@ -31,14 +31,41 @@
                         </div>
                     </div>
                     <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
-                        <h5 class="card-title">@ani.Nombre</h5>
-                        <p> </p>
-                        <div>
-                            Genero: @ani.Genero<br />
-                            Capitulos: @ani.Capitulos
+                        <div class="p-2">
+                            <h4>@ani.Nombre</h4>
                         </div>
-                        <div class="align-self-end">
-                            <a href="/Anime/#" class="btn btn-primary align-self-end">Go somewhere</a>
+                        <div class="p-2">
+                            <div class="flex-fill">Genero: @ani.Genero</div>
+                            <div class ="flex-fill">Capitulos: @ani.Capitulos</div>
+                        </div>
+                        <div>
+                            <div class="w-50 position-absolute bottom-0 p-2">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@ani.Id_Anime">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="@ani.Id_Anime" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <img src="img/anime/@ani.Imagen" class="card-img" alt="Imagen de @ani.Nombre">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@ani.Nombre</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>@ani.Sinopsis</p>
+                            <p>@ani.Sinopsis</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <a href="Animes/edit/@ani.Id_Anime">
+                                <button class="btn btn-primary" data-bs-dismiss="modal">Editar</button>
+                            </a>
                         </div>
                     </div>
                 </div>
