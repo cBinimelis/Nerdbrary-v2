@@ -2,25 +2,111 @@
 @page "/Animes/edit/{Id_Anime:int}"
 @inject IAnimeData aniData
 
-@if (Id_Anime is null)
-{
-    <PageTitle>Agregar un nuevo anime</PageTitle>
-    <h3>Agregar un nuevo anime</h3>
-}
-else
-{
-    <PageTitle>Editar "@CurrentAnime.Nombre"</PageTitle>
-    <h3>Editar "@CurrentAnime.Nombre"</h3>
-}
 
-<EditForm Model="CurrentAnime" OnSubmit="HandleSubmit" FormName="AnimeForm">
-    <div>
-        <label for="name">Nombre</label>
-        <InputText id="name" @bind-Value="CurrentAnime.Nombre" class="form-control" />
+<div class="container">
+    <!--Comprobar si se está editando o creando un elemento, para saber que informacion mostrar-->
+    @if (Id_Anime is null)
+    {
+        <PageTitle>Agregar un nuevo anime</PageTitle>
+        <h1>Agregar un nuevo anime</h1>
+    }
+    else
+    {
+        <PageTitle>Editar "@CurrentAnime.Nombre"</PageTitle>
+        <h1>Editar "@CurrentAnime.Nombre"</h1>
+    }
+
+    <div class="p-4"></div>
+
+    <div class="row">
+        <fieldset>
+            <EditForm Model="CurrentAnime" OnSubmit="HandleSubmit" FormName="AnimeForm">
+                <div class="row">
+                    <div class="col col-md-4 col-md-offset-4">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <InputText id="name" @bind-Value="CurrentAnime.Nombre" class="form-control" />
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="textinput">Line 2</label>
+                            <div class="col-sm-10">
+                                <input type="text" placeholder="Address Line 2" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="textinput">City</label>
+                            <div class="col-sm-10">
+                                <input type="text" placeholder="City" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="control-label" for="textinput">First name</label>
+                                    <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                                </div>
+                                <div class="col">
+                                    <label class="control-label" for="textinput">Last name</label>
+                                    <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pais">País:</label>
+                            <select name="pais" id="pais" class="form-control" required>
+                                <option value="">Selecciona un país</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Bolivia">Bolivia</option>
+                                <option value="Brasil">Brasil</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Paraguay">Paraguay</option>
+                                <option value="Perú">Perú</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Venezuela">Venezuela</option>
+                            </select>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="control-label" for="textinput">Country</label>
+                            <div class="">
+                                <input type="text" placeholder="Country" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-default">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-8 col-md-offset-8">
+                        <label class="control-label" for="textinput">Sinopsis</label>
+                        <div>
+                            <InputTextArea @bind-Value="CurrentAnime.Sinopsis" class="form-control" style="height: 350px"></InputTextArea>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </fieldset>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</EditForm>
-
+</div>
+<div class="container p-2">
+    <img id="preview" class="img-fluid" src="img/anime/@CurrentAnime.Imagen " alt="Vista previa de la imagen" />
+</div>
 
 @code {
     [Parameter]
@@ -31,19 +117,23 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Id_Anime is not null)
+        if (Id_Anime is not null)
         {
             int id = Convert.ToInt32(Id_Anime);
             var anime = await aniData.GetAnime(id);
-            if(anime is not null)
+            if (anime is not null)
             {
                 CurrentAnime.Nombre ??= anime.Nombre;
+                CurrentAnime.Sinopsis ??= anime.Sinopsis;
+                CurrentAnime.Lanzamiento = Convert.ToDateTime(anime.Lanzamiento);
+                CurrentAnime.Temporadas = anime.Temporadas;
+                CurrentAnime.Imagen ??= anime.Imagen;
             }
         }
     }
 
-    async Task HandleSubmit(){
+    void HandleSubmit()
+    {
 
     }
-
 }
