@@ -1,6 +1,7 @@
 ﻿@page "/Animes/edit"
 @page "/Animes/edit/{Id_Anime:int}"
 @inject IAnimeData aniData
+@inject NavigationManager NavigationManager
 
 
 <div class="container">
@@ -19,7 +20,6 @@
     <div class="p-4"></div>
 
     <div class="row">
-        <fieldset>
             <EditForm Model="CurrentAnime" OnSubmit="HandleSubmit" FormName="AnimeForm">
                 <div class="row">
                     <div class="col col-md-4 col-md-offset-4">
@@ -101,7 +101,6 @@
                     </div>
                 </div>
             </EditForm>
-        </fieldset>
     </div>
 </div>
 <div class="container p-2">
@@ -110,7 +109,7 @@
 
 @code {
     [Parameter]
-    public int? Id_Anime { get; set; } = null;
+    public int? Id_Anime { get; set; }
 
     [SupplyParameterFromForm]
     public Anime CurrentAnime { get; set; } = new();
@@ -119,15 +118,10 @@
     {
         if (Id_Anime is not null)
         {
-            int id = Convert.ToInt32(Id_Anime);
-            var anime = await aniData.GetAnime(id);
+            var anime = await aniData.GetAnimeAsync((int)Id_Anime);
             if (anime is not null)
             {
-                CurrentAnime.Nombre ??= anime.Nombre;
-                CurrentAnime.Sinopsis ??= anime.Sinopsis;
-                CurrentAnime.Lanzamiento = Convert.ToDateTime(anime.Lanzamiento);
-                CurrentAnime.Temporadas = anime.Temporadas;
-                CurrentAnime.Imagen ??= anime.Imagen;
+                CurrentAnime = anime;
             }
         }
     }

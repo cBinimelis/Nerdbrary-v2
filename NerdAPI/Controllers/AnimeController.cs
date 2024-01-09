@@ -17,17 +17,17 @@ namespace NerdAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<VAnime>> Get()
+        public async Task<List<VAnime>> Get()
         {
-            var anime = await _animeData.GetAnimes();
+            var anime = await _animeData.GetAllAnimeAsync();
             return anime;
         }
 
         // GET api/<AnimeController>/5
         [HttpGet("{id}")]
-        public async Task<VAnime?> Get(int id)
+        public async Task<Anime?> Get(int id)
         {
-            var anime = await _animeData.GetAnime(id);
+            var anime = await _animeData.GetAnimeAsync(id);
             return anime;
         }
 
@@ -59,8 +59,8 @@ namespace NerdAPI.Controllers
         {
             try
             {
-                anime.Id_Anime = id;
-                await _animeData.UpdateAnime(anime);
+                anime.IdAnime = id;
+                await _animeData.UpdateAnimeAsync(anime, id);
                 return Ok(new { message = "Anime actualizado correctamente" });
             }
             catch(Exception ex)
@@ -76,7 +76,7 @@ namespace NerdAPI.Controllers
         {
             try
             {
-                await _animeData.DeleteAnime(id);
+                await _animeData.DeleteAnimeAsync(id);
                 return Ok(new { message = "Producto eliminado correctamente" });
             }
             catch (Exception ex)

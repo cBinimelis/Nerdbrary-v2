@@ -1,5 +1,6 @@
-﻿using NerdClassLibrary.DbAccess;
-using NerdClassLibrary.Modelos;
+﻿using Microsoft.EntityFrameworkCore;
+using NerdClassLibrary.DbAccess;
+using NerdClassLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,64 @@ namespace NerdClassLibrary.Data
 {
     public class AnimeData : IAnimeData
     {
+        private readonly BdBibliotecaContext _context;
+
+        public AnimeData(BdBibliotecaContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<VAnime>> GetAllAnimeAsync()
+        {
+            var result = await _context.VAnimes.ToListAsync();
+            return result;
+        }
+
+        public async Task<Anime> GetAnimeAsync(int id)
+        {
+            var result = await _context.Animes.FindAsync(id);
+            return result;
+        }
+
+        public async Task AddAnimeAsync(Anime anime)
+        {
+            _context.Animes.Add(anime);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAnimeAsync(int id)
+        {
+            var anime = await _context.Animes.FindAsync(id);
+            if(anime != null)
+            {
+                _context.Remove(anime);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateAnimeAsync(Anime anime, int id)
+        {
+            var dbAnime = await _context.Animes.FindAsync(id);
+            if(dbAnime != null)
+            {
+                dbAnime.Nombre = anime.Nombre;
+                dbAnime.Sinopsis = anime.Sinopsis;
+                dbAnime.Lanzamiento = anime.Lanzamiento;
+                dbAnime.Temporadas = anime.Temporadas;
+                dbAnime.CapitulosTotales = anime.CapitulosTotales;
+                dbAnime.Imagen = anime.Imagen;
+                dbAnime.IdGeneroAnime = anime.IdGeneroAnime;
+                dbAnime.OtrosGeneros = anime.OtrosGeneros;
+                dbAnime.IdEstadoSerie = anime.IdEstadoSerie;
+                dbAnime.Activo = anime.Activo;
+
+                _context.Update(dbAnime);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        //DAPPER - DEPRECATED FOR THIS PROJECT
+        /*
         private readonly ISqlDataAccess _db;
         public AnimeData(ISqlDataAccess db)
         {
@@ -36,9 +95,9 @@ namespace NerdClassLibrary.Data
                 Anime.Temporadas,
                 Anime.CapitulosTotales,
                 Anime.Imagen,
-                Anime.Id_GeneroAnime,
+                Anime.IdGeneroAnime,
                 Anime.OtrosGeneros,
-                Anime.Id_EstadoSerie,
+                Anime.IdEstadoSerie,
                 Anime.Activo
             });
 
@@ -48,5 +107,6 @@ namespace NerdClassLibrary.Data
         public Task DeleteAnime(int id) =>
             _db.SaveData(storedProcedure: "Anime_Delete", new { Id = id });
 
+        */
     }
 }

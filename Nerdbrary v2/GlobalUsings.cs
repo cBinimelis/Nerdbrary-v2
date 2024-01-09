@@ -1,2 +1,2 @@
 ﻿global using NerdClassLibrary.Data;
-global using NerdClassLibrary.Modelos;
+global using NerdClassLibrary.Models;

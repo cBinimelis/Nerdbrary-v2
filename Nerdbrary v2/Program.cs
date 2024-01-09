@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NerdClassLibrary.DbAccess;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddDbContext<BdBibliotecaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IAnimeData, AnimeData>();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
-builder.Services.AddSingleton<IAnimeData, AnimeData>();
 //http Client
 builder.Services.AddHttpClient();
 

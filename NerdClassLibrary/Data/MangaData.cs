@@ -1,5 +1,5 @@
 ﻿using NerdClassLibrary.DbAccess;
-using NerdClassLibrary.Modelos;
+using NerdClassLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

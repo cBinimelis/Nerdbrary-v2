@@ -1,21 +1,9 @@
 ﻿@page "/Animes"
 @inject IAnimeData aniData
+@inject NavigationManager NavigationManager
 
 <h3>Anime</h3>
 
-<div class="g-3">
-    <div class="row g-0 p-4 position-relative rounded">
-        <h4>Ingresar nuevo Anime</h4>
-        <EditForm Model="@anime" OnValidSubmit="@InsertAnime">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <label>Nombre:</label>
-            <InputText class="form-text" id="Nombre" @bind-Value="anime.Nombre" />
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
-    </div>
-</div>
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
 
@@ -40,7 +28,7 @@
                         </div>
                         <div>
                             <div class="w-50 position-absolute bottom-0 p-2">
-                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@ani.Id_Anime">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@ani.IdAnime">
                                     Detalles
                                 </button>
                             </div>
@@ -49,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="@ani.Id_Anime" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="@ani.IdAnime" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <img src="img/anime/@ani.Imagen" class="card-img" alt="Imagen de @ani.Nombre">
@@ -63,8 +51,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <a href="Animes/edit/@ani.Id_Anime">
-                                <button class="btn btn-primary" data-bs-dismiss="modal">Editar</button>
+                            <a href="Animes/edit/@ani.IdAnime">
+                                <button class="btn btn-primary" @onclick="@(() => EditAnime(ani.IdAnime))" data-bs-dismiss="modal">Editar</button>
                             </a>
                         </div>
                     </div>
@@ -76,26 +64,20 @@
 
 
 @code {
-    IEnumerable<VAnime> aniEnum;
+    List<VAnime> aniEnum;
     Anime anime = new Anime();
 
     protected override async Task OnInitializedAsync()
     {
-        aniEnum = await aniData.GetAnimes();
+        aniEnum = await aniData.GetAllAnimeAsync();
     }
 
-    private async Task InsertAnime()
+    void EditAnime(int id)
     {
-        try
-        {
-            anime.Activo = true;
-            await aniData.InsertAnime(anime);
-            aniEnum = await aniData.GetAnimes();
-            anime = new Anime();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+        NavigationManager.NavigateTo($"/Animes/edit/{id}");
+    }
+    void AddAnime()
+    {
+        NavigationManager.NavigateTo("/Animes/edit");
     }
 }

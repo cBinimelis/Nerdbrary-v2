@@ -1,4 +1,4 @@
-global using NerdClassLibrary.Modelos;
+global using NerdClassLibrary.Models;
 global using Microsoft.EntityFrameworkCore;
 global using NerdClassLibrary.Data;
 using NerdClassLibrary.DbAccess;

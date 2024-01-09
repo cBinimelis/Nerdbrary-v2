@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using NerdClassLibrary
-@using NerdClassLibrary.Modelos
+@using NerdClassLibrary.Models
 @inject IUsuarioData usuData
 
 <PageTitle>Index</PageTitle>
@@ -25,7 +25,7 @@ Welcome to your new app.
             @foreach (var user in usuEnum)
             {
                 <tr>
-                    <td>@user.Id_Usuario</td>
+                    <td>@user.IdUsuario</td>
                     <td>@user.Nick</td>
                     <td>@user.Imagen</td>
                     <td>@user.Fondo</td>

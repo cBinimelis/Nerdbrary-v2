@@ -1,13 +1,13 @@
-﻿using NerdClassLibrary.Modelos;
+﻿using NerdClassLibrary.Models;
 
 namespace NerdClassLibrary.Data
 {
     public interface IAnimeData
     {
-        Task DeleteAnime(int id);
-        Task<VAnime?> GetAnime(int id);
-        Task<IEnumerable<VAnime>> GetAnimes();
-        Task InsertAnime(Anime Anime);
-        Task UpdateAnime(Anime Anime);
+        Task DeleteAnimeAsync(int id);
+        Task<Anime> GetAnimeAsync(int id);
+        Task<List<VAnime>> GetAllAnimeAsync();
+        Task AddAnimeAsync(Anime Anime);
+        Task UpdateAnimeAsync(Anime Anime, int id);
     }
 }

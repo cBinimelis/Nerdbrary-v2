@@ -1,4 +1,4 @@
-﻿using NerdClassLibrary.Modelos;
+﻿using NerdClassLibrary.Models;
 
 namespace Nerdbrary_v2.Controllers
 {
