@@ -4,10 +4,10 @@ namespace NerdClassLibrary.Data
 {
     public interface IAnimeData
     {
-        Task DeleteAnimeAsync(int id);
-        Task<Anime> GetAnimeAsync(int id);
         Task<List<VAnime>> GetAllAnimeAsync();
+        Task<Anime> GetAnimeAsync(int id);
         Task AddAnimeAsync(Anime Anime);
         Task UpdateAnimeAsync(Anime Anime, int id);
+        Task DeleteAnimeAsync(int id);
     }
 }

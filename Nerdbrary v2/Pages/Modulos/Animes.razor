@@ -5,10 +5,9 @@
 <h3>Anime</h3>
 
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-
-    @if (aniEnum != null)
-    {
+@if (aniEnum != null)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
         @foreach (var ani in aniEnum)
         {
             <div class="g-3">
@@ -24,7 +23,7 @@
                         </div>
                         <div class="p-2">
                             <div class="flex-fill">Genero: @ani.Genero</div>
-                            <div class ="flex-fill">Capitulos: @ani.Capitulos</div>
+                            <div class="flex-fill">Capitulos: @ani.Capitulos</div>
                         </div>
                         <div>
                             <div class="w-50 position-absolute bottom-0 p-2">
@@ -47,20 +46,26 @@
                         </div>
                         <div class="modal-body">
                             <p>@ani.Sinopsis</p>
-                            <p>@ani.Sinopsis</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <a href="Animes/edit/@ani.IdAnime">
-                                <button class="btn btn-primary" @onclick="@(() => EditAnime(ani.IdAnime))" data-bs-dismiss="modal">Editar</button>
-                            </a>
+                            <button class="btn btn-primary" @onclick="@(() => EditAnime(ani.IdAnime))" data-bs-dismiss="modal">Editar</button>
                         </div>
                     </div>
                 </div>
             </div>
         }
-    }
-</div>
+
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-center align-middle">
+        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
 
 
 @code {
@@ -69,15 +74,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(1000);
         aniEnum = await aniData.GetAllAnimeAsync();
     }
 
     void EditAnime(int id)
     {
         NavigationManager.NavigateTo($"/Animes/edit/{id}");
-    }
-    void AddAnime()
-    {
-        NavigationManager.NavigateTo("/Animes/edit");
     }
 }
