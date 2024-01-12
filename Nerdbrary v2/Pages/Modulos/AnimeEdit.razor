@@ -1,6 +1,7 @@
 ﻿@page "/Animes/edit"
 @page "/Animes/edit/{Id_Anime:int}"
 @inject IAnimeData aniData
+@inject IJSRuntime JS
 @inject IGeneroAnimeData generoAnimeData
 @inject NavigationManager NavigationManager
 
@@ -71,12 +72,10 @@
                         </div>
                     </div>
 
+                    <!-- Text input-->
                     <div class="form-group">
-                        <div class="pt-3">
-                            <button type="" @onclick="@(() => Delete(CurrentAnime.IdAnime))" class="btn btn-outline-danger w-25">Eliminar</button>
-                            <button type="" @onclick="@(() => BackToAnime())" class="btn btn-outline-primary w-auto">Cancelar</button>
-                            <button type="submit" class="btn btn-primary w-50">Guardar</button>
-                        </div>
+                        <label class="col-sm-2 control-label" for="imagen">Imagen:</label>
+                        <InputFile @ref="inputFile" OnChange="@ShowPreview" id="imagen" @bind-Value="CurrentAnime.Imagen" class="form-control" />
                     </div>
                 </div>
                 <div class="col col-md-8 col-md-offset-8">
@@ -86,12 +85,39 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="pt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="" @onclick="@(() => Delete(CurrentAnime.IdAnime))" class="btn btn-outline-danger w-25">Eliminar</button>
+                        <button type="" @onclick="@(() => BackToAnime())" class="btn btn-outline-primary w-25">Cancelar</button>
+                        <button type="submit" class="btn btn-primary w-50">Guardar</button>
+                    </div>
+                </div>
+            </div>
         </EditForm>
     </div>
 </div>
-<div class="container p-2">
-    <img id="preview" class="img-fluid" src="img/anime/@CurrentAnime.Imagen " alt="Vista previa de la imagen" />
-</div>
+
+@if (Id_Anime is not null)
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/anime/@CurrentAnime.Imagen" alt="Vista previa de la imagen" />
+    </div>
+}
+else
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/AnimeBG.jpg" alt="Vista previa de la imagen" />
+    </div>
+}
+
+<script>
+    window.previewImage = (inputElem, imgElem) => {
+        const url = URL.createObjectURL(inputElem.files[0]);
+        imgElem.addEventListener('load', () => URL.revokeObjectURL(url), { once: true });
+        imgElem.src = url;
+    }
+</script>
 
 @code {
     [Parameter]
@@ -100,7 +126,10 @@
     [SupplyParameterFromForm]
     public Anime CurrentAnime { get; set; } = new();
 
-    List<GeneroAnime> generoAnime;
+    private InputFile? inputFile;
+    private ElementReference previewImageElem;
+
+    List<GeneroAnime>? generoAnime;
 
     protected override async Task OnInitializedAsync()
     {
@@ -119,15 +148,27 @@
         }
     }
 
-    void HandleSubmit()
+    async void HandleSubmit()
     {
-
+        if (Id_Anime is not null)
+        {
+            await aniData.UpdateAnimeAsync(CurrentAnime, (int)Id_Anime);
+            BackToAnime();
+        }
+        else
+        {
+            await aniData.AddAnimeAsync(CurrentAnime);
+            BackToAnime();
+        }
     }
 
     void Delete(int id)
     {
 
     }
+
+    private async Task ShowPreview() => await JS.InvokeVoidAsync(
+        "previewImage", inputFile!.Element, previewImageElem);
 
     void BackToAnime()
     {

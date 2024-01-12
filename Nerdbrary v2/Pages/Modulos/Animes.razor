@@ -4,6 +4,9 @@
 
 <h3>Anime</h3>
 
+<div class="container">
+    <button @onclick="AddAnime" class="btn btn-outline-primary w-100">Agregar Anime</button>
+</div>
 
 @if (aniEnum != null)
 {
@@ -78,6 +81,10 @@ else
         aniEnum = await aniData.GetAllAnimeAsync();
     }
 
+    void AddAnime()
+    {
+        NavigationManager.NavigateTo("/Animes/edit");
+    }
     void EditAnime(int id)
     {
         NavigationManager.NavigateTo($"/Animes/edit/{id}");
