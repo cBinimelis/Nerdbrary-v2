@@ -75,7 +75,7 @@
                     <!-- Text input-->
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="imagen">Imagen:</label>
-                        <InputFile @ref="inputFile" OnChange="@ShowPreview" id="imagen" @bind-Value="CurrentAnime.Imagen" class="form-control" />
+                        <InputFile @ref="inputFile" OnChange="@LoadFile" id="imagen" @bind-Value="CurrentAnime.Imagen" class="form-control" />
                     </div>
                 </div>
                 <div class="col col-md-8 col-md-offset-8">
@@ -128,6 +128,7 @@ else
 
     private InputFile? inputFile;
     private ElementReference previewImageElem;
+    private IBrowserFile browserFile;
 
     List<GeneroAnime>? generoAnime;
 
@@ -157,9 +158,40 @@ else
         }
         else
         {
-            await aniData.AddAnimeAsync(CurrentAnime);
-            BackToAnime();
+            bool fileOk = false;
+            string newFileName = Regex.Replace(CurrentAnime.Nombre, @"[^0-9a-zA-Z_]+", "").ToLower();
+            string extension = browserFile.ContentType.Replace("image/", ".");
+            newFileName += extension;
+            if (inputFile != null)
+            {
+                fileOk = true;
+            }
+            if (fileOk)
+            {
+                try
+                {
+                    var path = Path.Combine(@"wwwroot/img/anime/", newFileName);
+                    await using FileStream fs = new(path, FileMode.Create);
+                    await browserFile.OpenReadStream().CopyToAsync(fs);
+
+                    CurrentAnime.Imagen = newFileName;
+                    CurrentAnime.Activo = true;
+                    CurrentAnime.IdEstadoSerie = 1;
+                    await aniData.AddAnimeAsync(CurrentAnime);
+                    BackToAnime();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        await ShowPreview();
+        browserFile = e.File;
     }
 
     void Delete(int id)
