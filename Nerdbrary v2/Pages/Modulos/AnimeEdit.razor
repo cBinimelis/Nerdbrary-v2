@@ -158,23 +158,12 @@ else
         }
         else
         {
-            bool fileOk = false;
-            string newFileName = Regex.Replace(CurrentAnime.Nombre, @"[^0-9a-zA-Z_]+", "").ToLower();
-            string extension = browserFile.ContentType.Replace("image/", ".");
-            newFileName += extension;
             if (inputFile != null)
-            {
-                fileOk = true;
-            }
-            if (fileOk)
             {
                 try
                 {
-                    var path = Path.Combine(@"wwwroot/img/anime/", newFileName);
-                    await using FileStream fs = new(path, FileMode.Create);
-                    await browserFile.OpenReadStream().CopyToAsync(fs);
-
-                    CurrentAnime.Imagen = newFileName;
+                    //Crear imagen en el servidor
+                    await CreateImage();
                     CurrentAnime.Activo = true;
                     CurrentAnime.IdEstadoSerie = 1;
                     await aniData.AddAnimeAsync(CurrentAnime);
@@ -182,12 +171,38 @@ else
                 }
                 catch (Exception ex)
                 {
-
+                    await JS.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
     }
 
+    private async Task CreateImage()
+    {
+        //Se utiliza Regex para eliminar todos los caracteres especiales, además se deja todo en minúsculas,
+        //esto para poder tener una nomenclatura estandar en el nombre de los archivos.
+        string newFileName = Regex.Replace(CurrentAnime.Nombre, @"[^0-9a-zA-Z_]+", "").ToLower();
+
+        string extension = browserFile.ContentType.Replace("image/", ".");
+
+        //Se comprueba la extension, en caso de no ser la requerida, se devuelve una excepción para cancelar el
+        //método actual y aquellos que lo estén utilizando
+        if (extension == ".jpg" || extension == ".jpeg")
+        {
+            newFileName += extension;
+            var path = Path.Combine(@"wwwroot/img/anime/", newFileName);
+
+            await using FileStream fs = new(path, FileMode.Create);
+            await browserFile.OpenReadStream().CopyToAsync(fs);
+            CurrentAnime.Imagen = newFileName;
+        }
+        else
+        {
+            throw new FileLoadException();
+        }
+    }
+
+    //Adicional de cargar la vista previa, se carga el archivo a la variable correspondiente
     private async Task LoadFile(InputFileChangeEventArgs e)
     {
         await ShowPreview();
@@ -196,7 +211,7 @@ else
 
     void Delete(int id)
     {
-
+        // TODO - crear metodo para eliminar elementos con confirmación
     }
 
     private async Task ShowPreview() => await JS.InvokeVoidAsync(
