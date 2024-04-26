@@ -1,5 +1,80 @@
-﻿<h3>Mangas</h3>
+﻿@page "/Mangas"
+@inject IMangaData mangaData
+@inject NavigationManager NavigationManager
+
+<h3>Manga</h3>
+
+<div class="container">
+    <button @onclick="AddManga" class="btn btn-outline-primary w-100">Agregar Manga</button>
+</div>
+
+@if (mangaEnum != null){
+    <div class="row row-cols-1 row-cols-sm-2 rows-cols-md-3">
+        @foreach(var manga in mangaEnum){
+            <div class="g-3">
+                <div class="row g-0 bg-body-secondary position-relative rounded">
+                    <div class="col-md-6 mb-md-0 p-md-2">
+                        <div class="ratio ratio-1x1">
+                            <img src="img/manga/@manga.Imagen" class="object-fit-cover border rounded" alt="Imagen de @manga.Nombre">
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
+                        <div class="p-2">
+                            <h4>@manga.Nombre</h4>
+                        </div>
+                        <div class="p-2">
+                            <div class="flex-fill">Genero: @manga.Genero</div>
+                            <div class="flex-fill">Capitulos: @manga.Tomos</div>
+                        </div>
+                        <div>
+                            <div class="w-50 position-absolute bottom-0 p-2">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@manga.IdManga">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="@manga.IdManga" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <img src="img/manga/@manga.Imagen" class="card-img" alt="Imagen de @manga.Nombre">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@manga.Nombre</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>@manga.Sinopsis</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary" @onclick="@(() => EditManga(manga.IdManga))" data-bs-dismiss="modal">Editar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
 
 @code {
+    List<VManga> mangaEnum;
+    Manga manga = new Manga();
 
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        mangaEnum = await mangaData.GetAllMangaAsync();
+    }
+
+    void AddManga()
+    {
+        NavigationManager.NavigateTo("/Mangas/edit");
+    }
+    void EditManga(int id)
+    {
+        NavigationManager.NavigateTo($"/Mangas/edit/{id}");
+    }
 }
