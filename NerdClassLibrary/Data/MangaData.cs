@@ -1,47 +1,50 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NerdClassLibrary.DbAccess;
 using NerdClassLibrary.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NerdClassLibrary.Data
 {
     public class MangaData : IMangaData
     {
         private readonly BdBibliotecaContext _context;
-        public MangaData(BdBibliotecaContext context){
+
+        public MangaData(BdBibliotecaContext context)
+        {
             _context = context;
         }
 
-        public async Task<List<VManga>> GetAllMangaAsync(){
+        public async Task<List<VManga>> GetAllMangaAsync()
+        {
             var result = await _context.VMangas.ToListAsync();
             return result;
         }
 
-        public async Task<Manga> GetMangaAsync(int id){
+        public async Task<Manga> GetMangaAsync(int id)
+        {
             var result = await _context.Mangas.FindAsync(id);
             return result;
         }
 
-        public async Task AddMangaAsync(Manga manga){
+        public async Task AddMangaAsync(Manga manga)
+        {
             _context.Mangas.Add(manga);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteMangaAsync(int id){
+        public async Task DeleteMangaAsync(int id)
+        {
             var manga = await _context.Mangas.FindAsync(id);
-            if(manga!=null){
+            if (manga != null)
+            {
                 _context.Remove(manga);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task UpdateMangaAsync(Manga manga, int id){
+        public async Task UpdateMangaAsync(Manga manga, int id)
+        {
             var dbManga = await _context.Mangas.FindAsync(id);
-            if(dbManga!=null){
+            if (dbManga != null)
+            {
                 dbManga.Nombre = manga.Nombre;
                 dbManga.Sinopsis = manga.Sinopsis;
                 dbManga.Lanzamiento = manga.Lanzamiento;

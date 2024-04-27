@@ -8,9 +8,11 @@
     <button @onclick="AddManga" class="btn btn-outline-primary w-100">Agregar Manga</button>
 </div>
 
-@if (mangaEnum != null){
-    <div class="row row-cols-1 row-cols-sm-2 rows-cols-md-3">
-        @foreach(var manga in mangaEnum){
+@if (mangaEnum != null)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+        @foreach (var manga in mangaEnum)
+        {
             <div class="g-3">
                 <div class="row g-0 bg-body-secondary position-relative rounded">
                     <div class="col-md-6 mb-md-0 p-md-2">
@@ -20,11 +22,11 @@
                     </div>
                     <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
                         <div class="p-2">
-                            <h4>@manga.Nombre</h4>
+                            <h4 class="text-nowrap overflow-hidden">@manga.Nombre</h4>
                         </div>
                         <div class="p-2">
                             <div class="flex-fill">Genero: @manga.Genero</div>
-                            <div class="flex-fill">Capitulos: @manga.Tomos</div>
+                            <div class="flex-fill">Tomos: @manga.Tomos</div>
                         </div>
                         <div>
                             <div class="w-50 position-absolute bottom-0 p-2">
@@ -58,14 +60,21 @@
         }
     </div>
 }
+else
+{
+    <div class="d-flex justify-content-center align-middle">
+        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
 
 @code {
     List<VManga> mangaEnum;
-    Manga manga = new Manga();
+    Manga manga = new();
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1000);
         mangaEnum = await mangaData.GetAllMangaAsync();
     }
 

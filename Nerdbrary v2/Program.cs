@@ -13,6 +13,8 @@ builder.Services.AddDbContext<BdBibliotecaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<IAnimeData, AnimeData>();
 builder.Services.AddScoped<IGeneroAnimeData, GeneroAnimeData>();
+builder.Services.AddScoped<IMangaData, MangaData>();
+builder.Services.AddScoped<IGeneroMangaData, GeneroMangaData>();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
 //http Client

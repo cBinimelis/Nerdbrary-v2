@@ -3,36 +3,37 @@ using NerdClassLibrary.Models;
 
 namespace NerdClassLibrary.Data
 {
-    public class GeneroAnimeData : IGeneroAnimeData
+    public class GeneroMangaData : IGeneroMangaData
     {
         private readonly BdBibliotecaContext _context;
 
-        public GeneroAnimeData(BdBibliotecaContext context)
+        public GeneroMangaData(BdBibliotecaContext context)
         {
             _context = context;
         }
-        public Task AddGeneroAnimeAsync(GeneroAnime generoAnime)
+
+        public Task AddGeneroMangaAsync(GeneroManga generoManga)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteGeneroAnimeAsync(int id)
+        public Task DeleteGeneroMangaAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<GeneroAnime>> GetAllGeneroAnimeAsync()
+        public async Task<List<GeneroManga>> GetAllGeneroMangaAsync()
         {
-            var result = await _context.GeneroAnimes.ToListAsync();
+            var result = await _context.GeneroMangas.ToListAsync();
             return result;
         }
 
-        public Task<GeneroAnime> GetGeneroAnimeAsync(int id)
+        public Task<GeneroManga> GetGeneroMangaAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateGeneroAnimeAsync(GeneroAnime generoAnime, int id)
+        public Task UpdateGeneroMangaAsync(GeneroManga generoManga, int id)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,218 @@
-﻿<h3>Component</h3>
+﻿@page "/Mangas/edit"
+@page "/Mangas/edit/{Id_Manga:int}"
+@inject IMangaData mangaData
+@inject IJSRuntime JS
+@inject IGeneroMangaData generoMangaData
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <!--Comprobar si se está editando o creando un elemento, para saber que informacion mostrar-->
+    @if (Id_Manga is null)
+    {
+        <PageTitle>Agregar un nuevo manga</PageTitle>
+        <h1>Agregar un nuevo manga</h1>
+    }
+    else
+    {
+        <PageTitle>Editar "@CurrentManga.Nombre"</PageTitle>
+        <h1>Editar "@CurrentManga.Nombre"</h1>
+    }
+
+    <div class="p-4"></div>
+
+    <div class="row">
+        <EditForm Model="CurrentManga" OnSubmit="HandleSubmit" FormName="MangaForm">
+            <div class="row">
+                <div class="col col-md-4 col-md-offset-4">
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <InputText id="name" @bind-Value="CurrentManga.Nombre" class="form-control" />
+                    </div>
+
+                    <!-- Select input-->
+                    <div class="form-group">
+                        <label class="control-label" for="selectinput">Genero:</label>
+                        <InputSelect class="form-control" id="selectinput" @bind-Value="CurrentManga.IdGeneroManga">
+                            <option value="">Genero Manga...</option>
+                            @if (generoManga != null)
+                            {
+                                @foreach (var genero in generoManga)
+                                {
+                                    <option value="@genero.IdGeneroManga">@genero.Descripcion</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="otrostgeneros">Otros:</label>
+                        <InputText id="otrostgeneros" @bind-Value="CurrentManga.OtrosGeneros" class="form-control" />
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="lanzamiento">Estreno:</label>
+                        <InputDate id="lanzamiento" @bind-Value="CurrentManga.Lanzamiento" class="form-control" />
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                                <label class="control-label" for="capitulos">Tomos:</label>
+                                <InputNumber id="capitulos" @bind-Value="CurrentManga.Tomos" class="form-control" />
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="imagen">Imagen:</label>
+                        <InputFile @ref="inputFile" OnChange="@LoadFile" id="imagen" @bind-Value="CurrentManga.Imagen" class="form-control" />
+                    </div>
+                </div>
+                <div class="col col-md-8 col-md-offset-8">
+                    <label class="control-label" for="textinput">Sinopsis</label>
+                    <div>
+                        <InputTextArea @bind-Value="CurrentManga.Sinopsis" class="form-control" style="height: 350px"></InputTextArea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="pt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" @onclick="@(() => Delete(CurrentManga.IdManga))" class="btn btn-outline-danger w-25">Eliminar</button>
+                        <button type="button" @onclick="@(() => BackToManga())" class="btn btn-outline-primary w-25">Cancelar</button>
+                        <button type="submit" class="btn btn-primary w-50">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+
+@if(Id_Manga is not null)
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/manga/@CurrentManga.Imagen" alt="Vista previa de la imagen" />
+    </div>
+}
+else
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/MangaBG.png" alt="Vista previa de la imagen" />
+    </div>
+}
+
+<script>
+    window.previewImage = (inputElem, imgElem) => {
+        const url = URL.createObjectURL(inputElem.files[0]);
+        imgElem.addEventListener('load', () => URL.revokeObjectURL(url), { once: true });
+        imgElem.src = url;
+    }
+</script>
+
 
 @code {
+    [Parameter]
+    public int? Id_Manga { get; set; }
 
+    [SupplyParameterFromForm]
+    public Manga CurrentManga { get; set; } = new();
+
+    private InputFile? inputFile;
+    private ElementReference previewImageElem;
+    private IBrowserFile browserFile;
+
+    List<GeneroManga>? generoManga;
+
+    protected override async Task OnInitializedAsync()
+    {
+        generoManga = await generoMangaData.GetAllGeneroMangaAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id_Manga is not null)
+        {
+            var manga = await mangaData.GetMangaAsync((int)Id_Manga);
+            if (manga is not null)
+            {
+                CurrentManga = manga;
+            }
+        }
+    }
+
+    async void HandleSubmit()
+    {
+        if (Id_Manga is not null)
+        {
+            await mangaData.UpdateMangaAsync(CurrentManga, (int)Id_Manga);
+            BackToManga();
+        }
+        else
+        {
+            if (inputFile != null)
+            {
+                try
+                {
+                    //Crear imagen en el servidor
+                    await CreateImage();
+                    CurrentManga.Activo = true;
+                    CurrentManga.IdEstadoManga = 1;
+                    await mangaData.AddMangaAsync(CurrentManga);
+                    BackToManga();
+                }
+                catch (Exception ex)
+                {
+                    await JS.InvokeVoidAsync("alert", ex.Message);
+                }
+            }
+        }
+    }
+
+    private async Task CreateImage()
+    {
+        //Se utiliza Regex para eliminar todos los caracteres especiales, además se deja todo en minúsculas,
+        //esto para poder tener una nomenclatura estandar en el nombre de los archivos.
+        string newFileName = Regex.Replace(CurrentManga.Nombre, @"[^0-9a-zA-Z_]+", "").ToLower();
+
+        string extension = browserFile.ContentType.Replace("image/", ".");
+
+        //Se comprueba la extension, en caso de no ser la requerida, se devuelve una excepción para cancelar el
+        //método actual y aquellos que lo estén utilizando
+        if (extension == ".jpg" || extension == ".jpeg")
+        {
+            newFileName += extension;
+            var path = Path.Combine(@"wwwroot/img/manga/", newFileName);
+
+            await using FileStream fs = new(path, FileMode.Create);
+            await browserFile.OpenReadStream().CopyToAsync(fs);
+            CurrentManga.Imagen = newFileName;
+        }
+        else
+        {
+            throw new FileLoadException();
+        }
+    }
+
+    //Adicional de cargar la vista previa, se carga el archivo a la variable correspondiente
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        await ShowPreview();
+        browserFile = e.File;
+    }
+
+    void Delete(int id)
+    {
+        // TODO - crear metodo para eliminar elementos con confirmación
+    }
+
+    private async Task ShowPreview() => await JS.InvokeVoidAsync(
+        "previewImage", inputFile!.Element, previewImageElem);
+
+    void BackToManga()
+    {
+        NavigationManager.NavigateTo("/Mangas");
+    }
 }

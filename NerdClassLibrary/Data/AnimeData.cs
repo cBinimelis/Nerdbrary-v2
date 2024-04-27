@@ -1,11 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NerdClassLibrary.DbAccess;
 using NerdClassLibrary.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NerdClassLibrary.Data
 {
