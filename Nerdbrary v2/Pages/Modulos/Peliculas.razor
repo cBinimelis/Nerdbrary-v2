@@ -1,36 +1,36 @@
-﻿@page "/Animes"
-@inject IAnimeData aniData
+﻿@page "/Peliculas"
+@inject IPeliculaData PeliculaData
 @inject NavigationManager NavigationManager
 
-<h3>Anime</h3>
+<h3>Pelicula</h3>
 
 <div class="container">
-    <button @onclick="AddAnime" class="btn btn-outline-primary w-100">Agregar Anime</button>
+    <button @onclick="AddPelicula" class="btn btn-outline-primary w-100">Agregar Pelicula</button>
 </div>
 
-@if (aniEnum != null)
+@if (peliculasEnum != null)
 {
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
-        @foreach (var ani in aniEnum)
+        @foreach (var Pelicula in peliculasEnum)
         {
             <div class="g-3">
                 <div class="row g-0 bg-body-secondary position-relative rounded">
                     <div class="col-md-6 mb-md-0 p-md-2">
                         <div class="ratio ratio-1x1">
-                            <img src="img/anime/@ani.Imagen" class="object-fit-cover border rounded" alt="Imagen de @ani.Nombre">
+                            <img src="img/movies/@Pelicula.Imagen" class="object-fit-cover border rounded" alt="Imagen de @Pelicula.Nombre">
                         </div>
                     </div>
                     <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
                         <div class="p-2">
-                            <h4 class="text-nowrap overflow-hidden">@ani.Nombre</h4>
+                            <h4 class="text-nowrap overflow-hidden">@Pelicula.Nombre</h4>
                         </div>
                         <div class="p-2">
-                            <div class="flex-fill">Genero: @ani.Genero</div>
-                            <div class="flex-fill">Capitulos: @ani.Capitulos</div>
+                            <div class="flex-fill">Genero: @Pelicula.Genero</div>
+                            <div class="flex-fill">Duración: @Pelicula.Duracion</div>
                         </div>
                         <div>
                             <div class="w-50 position-absolute bottom-0 p-2">
-                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@ani.IdAnime">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@Pelicula.IdPelicula">
                                     Detalles
                                 </button>
                             </div>
@@ -39,20 +39,20 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="@ani.IdAnime" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="@Pelicula.IdPelicula" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <img src="img/anime/@ani.Imagen" class="card-img" alt="Imagen de @ani.Nombre">
+                        <img src="img/movies/@Pelicula.Imagen" class="card-img" alt="Imagen de @Pelicula.Nombre">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@ani.Nombre</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@Pelicula.Nombre</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>@ani.Sinopsis</p>
+                            <p>@Pelicula.Sinopsis</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button class="btn btn-primary" @onclick="@(() => EditAnime(ani.IdAnime))" data-bs-dismiss="modal">Editar</button>
+                            <button class="btn btn-primary" @onclick="@(() => EditPelicula(Pelicula.IdPelicula))" data-bs-dismiss="modal">Editar</button>
                         </div>
                     </div>
                 </div>
@@ -72,20 +72,20 @@ else
 
 
 @code {
-    List<VAnime>? aniEnum;
-    Anime anime = new Anime();
+    List<VPelicula>? peliculasEnum;
+    Pelicula peliculas = new();
 
     protected override async Task OnInitializedAsync()
     {
-        aniEnum = await aniData.GetAllAnimeAsync();
+        peliculasEnum = await PeliculaData.GetAllPeliculaAsync();
     }
 
-    void AddAnime()
+    void AddPelicula()
     {
-        NavigationManager.NavigateTo("/Animes/edit");
+        NavigationManager.NavigateTo("/Peliculas/edit");
     }
-    void EditAnime(int id)
+    void EditPelicula(int id)
     {
-        NavigationManager.NavigateTo($"/Animes/edit/{id}");
+        NavigationManager.NavigateTo($"/Peliculas/edit/{id}");
     }
 }

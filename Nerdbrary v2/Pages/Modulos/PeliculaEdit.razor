@@ -1,0 +1,217 @@
+﻿@page "/Peliculas/edit"
+@page "/Peliculas/edit/{Id_Pelicula:int}"
+@inject IPeliculaData peliculaData
+@inject IJSRuntime JS
+@inject IGeneroPeliculaData generoPeliculaData
+@inject NavigationManager NavigationManager
+
+
+<div class="container">
+    <!--Comprobar si se está editando o creando un elemento, para saber que informacion mostrar-->
+    @if (Id_Pelicula is null)
+    {
+        <PageTitle>Agregar una nueva Película</PageTitle>
+        <h1>Agregar una nueva Película</h1>
+    }
+    else
+    {
+        <PageTitle>Editar "@CurrentPelicula.Nombre"</PageTitle>
+        <h1>Editar "@CurrentPelicula.Nombre"</h1>
+    }
+
+    <div class="p-4"></div>
+
+    <div class="row">
+        <EditForm Model="CurrentPelicula" OnSubmit="HandleSubmit" FormName="PeliculaForm">
+            <div class="row">
+                <div class="col col-md-4 col-md-offset-4">
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <InputText id="name" @bind-Value="CurrentPelicula.Nombre" class="form-control" />
+                    </div>
+
+                    <!-- Select input-->
+                    <div class="form-group">
+                        <label class="control-label" for="selectinput">Genero:</label>
+                        <InputSelect class="form-control" id="selectinput" @bind-Value="CurrentPelicula.IdGeneroPelicula">
+                            <option value="">Genero Pelicula...</option>
+                            @if (generoPelicula != null)
+                            {
+                                @foreach (var genero in generoPelicula)
+                                {
+                                    <option value="@genero.IdGeneroPelicula">@genero.Descripcion</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="otrostgeneros">Otros:</label>
+                        <InputText id="otrostgeneros" @bind-Value="CurrentPelicula.OtrosGeneros" class="form-control" />
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="lanzamiento">Estreno:</label>
+                        <InputDate id="lanzamiento" @bind-Value="CurrentPelicula.Lanzamiento" class="form-control" />
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="control-label" for="duracion">Duración:</label>
+                        <InputText id="duracion" @bind-Value="CurrentPelicula.Duracion" class="form-control" />
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="imagen">Imagen:</label>
+                        <InputFile @ref="inputFile" OnChange="@LoadFile" id="imagen" @bind-Value="CurrentPelicula.Imagen" class="form-control" />
+                    </div>
+                </div>
+                <div class="col col-md-8 col-md-offset-8">
+                    <label class="control-label" for="textinput">Sinopsis</label>
+                    <div>
+                        <InputTextArea @bind-Value="CurrentPelicula.Sinopsis" class="form-control" style="height: 350px"></InputTextArea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="pt-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" @onclick="@(() => Delete(CurrentPelicula.IdPelicula))" class="btn btn-outline-danger w-25">Eliminar</button>
+                        <button type="button" @onclick="@(() => BackToPelicula())" class="btn btn-outline-primary w-25">Cancelar</button>
+                        <button type="submit" class="btn btn-primary w-50">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (Id_Pelicula is not null)
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/movies/@CurrentPelicula.Imagen" alt="Vista previa de la imagen" />
+    </div>
+}
+else
+{
+    <div class="container p-2">
+        <img class="img-fluid" @ref="previewImageElem" src="img/PeliculaBG.jpg" alt="Vista previa de la imagen" />
+    </div>
+}
+
+<script>
+    window.previewImage = (inputElem, imgElem) => {
+        const url = URL.createObjectURL(inputElem.files[0]);
+        imgElem.addEventListener('load', () => URL.revokeObjectURL(url), { once: true });
+        imgElem.src = url;
+    }
+</script>
+
+@code {
+    [Parameter]
+    public int? Id_Pelicula { get; set; }
+
+    [SupplyParameterFromForm]
+    public Pelicula CurrentPelicula { get; set; } = new();
+
+    private InputFile? inputFile;
+    private ElementReference previewImageElem;
+    private IBrowserFile? browserFile;
+
+    List<GeneroPelicula>? generoPelicula;
+
+    protected override async Task OnInitializedAsync()
+    {
+        generoPelicula = await generoPeliculaData.GetAllGeneroPeliculaAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id_Pelicula is not null)
+        {
+            var pelicula = await peliculaData.GetPeliculaAsync((int)Id_Pelicula);
+            if (pelicula is not null)
+            {
+                CurrentPelicula = pelicula;
+            }
+        }
+    }
+
+    async void HandleSubmit()
+    {
+        if (Id_Pelicula is not null)
+        {
+            await peliculaData.UpdatePeliculaAsync(CurrentPelicula, (int)Id_Pelicula);
+            BackToPelicula();
+        }
+        else
+        {
+            if (inputFile != null)
+            {
+                try
+                {
+                    //Crear imagen en el servidor
+                    await CreateImage();
+                    CurrentPelicula.Activo = true;
+                    CurrentPelicula.IdEstadoPelicula = 1;
+                    await peliculaData.AddPeliculaAsync(CurrentPelicula);
+                    BackToPelicula();
+                }
+                catch (Exception ex)
+                {
+                    await JS.InvokeVoidAsync("alert", ex.Message);
+                }
+            }
+        }
+    }
+
+    private async Task CreateImage()
+    {
+        //Se utiliza Regex para eliminar todos los caracteres especiales, además se deja todo en minúsculas,
+        //esto para poder tener una nomenclatura estandar en el nombre de los archivos.
+        string newFileName = Regex.Replace(CurrentPelicula.Nombre, @"[^0-9a-zA-Z_]+", "").ToLower();
+
+        string extension = browserFile.ContentType.Replace("image/", ".");
+
+        //Se comprueba la extension, en caso de no ser la requerida, se devuelve una excepción para cancelar el
+        //método actual y aquellos que lo estén utilizando
+        if (extension == ".jpg" || extension == ".jpeg")
+        {
+            newFileName += extension;
+            var path = Path.Combine(@"wwwroot/img/movies/", newFileName);
+
+            await using FileStream fs = new(path, FileMode.Create);
+            await browserFile.OpenReadStream().CopyToAsync(fs);
+            CurrentPelicula.Imagen = newFileName;
+        }
+        else
+        {
+            throw new FileLoadException();
+        }
+    }
+
+    //Adicional de cargar la vista previa, se carga el archivo a la variable correspondiente
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        await ShowPreview();
+        browserFile = e.File;
+    }
+
+    void Delete(int id)
+    {
+        // TODO - crear metodo para eliminar elementos con confirmación
+    }
+
+    private async Task ShowPreview() => await JS.InvokeVoidAsync(
+        "previewImage", inputFile!.Element, previewImageElem);
+
+    void BackToPelicula()
+    {
+        NavigationManager.NavigateTo("/Peliculas");
+    }
+}

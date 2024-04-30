@@ -1,36 +1,36 @@
-﻿@page "/Animes"
-@inject IAnimeData aniData
+@page "/Series"
+@inject ISerieData serieData
 @inject NavigationManager NavigationManager
 
-<h3>Anime</h3>
+<h3>Serie</h3>
 
 <div class="container">
-    <button @onclick="AddAnime" class="btn btn-outline-primary w-100">Agregar Anime</button>
+    <button @onclick="AddSerie" class="btn btn-outline-primary w-100">Agregar Serie</button>
 </div>
 
-@if (aniEnum != null)
+@if (seriesEnum != null)
 {
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
-        @foreach (var ani in aniEnum)
+        @foreach (var serie in seriesEnum)
         {
             <div class="g-3">
                 <div class="row g-0 bg-body-secondary position-relative rounded">
                     <div class="col-md-6 mb-md-0 p-md-2">
                         <div class="ratio ratio-1x1">
-                            <img src="img/anime/@ani.Imagen" class="object-fit-cover border rounded" alt="Imagen de @ani.Nombre">
+                            <img src="img/series/@serie.Imagen" class="object-fit-cover border rounded" alt="Imagen de @serie.Nombre">
                         </div>
                     </div>
                     <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
                         <div class="p-2">
-                            <h4 class="text-nowrap overflow-hidden">@ani.Nombre</h4>
+                            <h4 class="text-nowrap overflow-hidden">@serie.Nombre</h4>
                         </div>
                         <div class="p-2">
-                            <div class="flex-fill">Genero: @ani.Genero</div>
-                            <div class="flex-fill">Capitulos: @ani.Capitulos</div>
+                            <div class="flex-fill">Genero: @serie.Genero</div>
+                            <div class="flex-fill">Capitulos: @serie.Capitulos</div>
                         </div>
                         <div>
                             <div class="w-50 position-absolute bottom-0 p-2">
-                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@ani.IdAnime">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@serie.IdSerie">
                                     Detalles
                                 </button>
                             </div>
@@ -39,20 +39,20 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="@ani.IdAnime" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="@serie.IdSerie" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <img src="img/anime/@ani.Imagen" class="card-img" alt="Imagen de @ani.Nombre">
+                        <img src="img/series/@serie.Imagen" class="card-img" alt="Imagen de @serie.Nombre">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@ani.Nombre</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@serie.Nombre</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>@ani.Sinopsis</p>
+                            <p>@serie.Sinopsis</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button class="btn btn-primary" @onclick="@(() => EditAnime(ani.IdAnime))" data-bs-dismiss="modal">Editar</button>
+                            <button class="btn btn-primary" @onclick="@(() => EditSerie(serie.IdSerie))" data-bs-dismiss="modal">Editar</button>
                         </div>
                     </div>
                 </div>
@@ -72,20 +72,20 @@ else
 
 
 @code {
-    List<VAnime>? aniEnum;
-    Anime anime = new Anime();
+    List<VSeries>? seriesEnum;
+    Series series = new();
 
     protected override async Task OnInitializedAsync()
     {
-        aniEnum = await aniData.GetAllAnimeAsync();
+        seriesEnum = await serieData.GetAllSerieAsync();
     }
 
-    void AddAnime()
+    void AddSerie()
     {
-        NavigationManager.NavigateTo("/Animes/edit");
+        NavigationManager.NavigateTo("/Series/edit");
     }
-    void EditAnime(int id)
+    void EditSerie(int id)
     {
-        NavigationManager.NavigateTo($"/Animes/edit/{id}");
+        NavigationManager.NavigateTo($"/Series/edit/{id}");
     }
 }

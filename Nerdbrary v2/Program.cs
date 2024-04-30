@@ -15,6 +15,10 @@ builder.Services.AddScoped<IAnimeData, AnimeData>();
 builder.Services.AddScoped<IGeneroAnimeData, GeneroAnimeData>();
 builder.Services.AddScoped<IMangaData, MangaData>();
 builder.Services.AddScoped<IGeneroMangaData, GeneroMangaData>();
+builder.Services.AddScoped<ISerieData, SerieData>();
+builder.Services.AddScoped<IGeneroSerieData, GeneroSerieData>();
+builder.Services.AddScoped<IPeliculaData, PeliculaData>();
+builder.Services.AddScoped<IGeneroPeliculaData, GeneroPeliculaData>();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
 //http Client

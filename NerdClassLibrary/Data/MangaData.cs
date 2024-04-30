@@ -14,7 +14,7 @@ namespace NerdClassLibrary.Data
 
         public async Task<List<VManga>> GetAllMangaAsync()
         {
-            var result = await _context.VMangas.ToListAsync();
+            var result = await _context.VMangas.OrderBy(x => x.Nombre).ToListAsync();
             return result;
         }
 
