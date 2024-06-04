@@ -11,8 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddSingleton<IAnimeData, AnimeData>();
+builder.Services.AddDbContext<BdBibliotecaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+//builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+builder.Services.AddScoped<IAnimeData, AnimeData>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

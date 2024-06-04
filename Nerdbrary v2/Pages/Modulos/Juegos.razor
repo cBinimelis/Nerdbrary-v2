@@ -1,0 +1,90 @@
+@page "/Juegos"
+@inject IJuegoData juegoData
+@inject NavigationManager NavigationManager
+
+<h3>Juegos</h3>
+
+<div class="container">
+    <button @onclick="AddJuego" class="btn btn-outline-primary w-100">Agregar Juego</button>
+</div>
+
+@if (juegosEnum != null)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+        @foreach (var juego in juegosEnum)
+        {
+            <div class="g-3">
+                <div class="row g-0 bg-body-secondary position-relative rounded">
+                    <div class="col-md-6 mb-md-0 p-md-2">
+                        <div class="ratio ratio-1x1">
+                            <img src="img/games/@juego.Imagen" class="object-fit-cover border rounded" alt="Imagen de @juego.Nombre">
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-2 ps-md-0 card-body d-flex flex-column">
+                        <div class="p-2">
+                            <h4 class="text-nowrap overflow-hidden">@juego.Nombre</h4>
+                        </div>
+                        <div class="p-2">
+                            <div class="flex-fill">Genero: @juego.Genero</div>
+                        </div>
+                        <div>
+                            <div class="w-50 position-absolute bottom-0 p-2">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#@juego.IdJuego">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="@juego.IdJuego" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <img src="img/games/@juego.Imagen" class="card-img" alt="Imagen de @juego.Nombre">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">@juego.Nombre</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>@juego.Sinopsis</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary" @onclick="@(() => EditJuego(juego.IdJuego))" data-bs-dismiss="modal">Editar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-center align-middle">
+        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+
+
+@code {
+    List<VJuego>? juegosEnum;
+    Juego juego = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        juegosEnum = await juegoData.GetAllJuegoAsync();
+    }
+
+    void AddJuego()
+    {
+        NavigationManager.NavigateTo("/Juegos/edit");
+    }
+    void EditJuego(int id)
+    {
+        NavigationManager.NavigateTo($"/Juegos/edit/{id}");
+    }
+}
