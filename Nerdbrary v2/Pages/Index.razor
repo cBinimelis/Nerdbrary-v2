@@ -3,54 +3,52 @@
 @using NerdClassLibrary.Models
 @inject IUsuarioData usuData
 
-<PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-@if(usuEnum!=null){
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            @foreach (var user in usuEnum)
-            {
-                <tr>
-                    <td>@user.IdUsuario</td>
-                    <td>@user.Nick</td>
-                    <td>@user.Imagen</td>
-                    <td>@user.Fondo</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-<div>
-    <button type="button" class="btn btn-primary">Primary</button>
-    <button type="button" class="btn btn-secondary">Secondary</button>
-    <button type="button" class="btn btn-success">Success</button>
-    <button type="button" class="btn btn-danger">Danger</button>
-    <button type="button" class="btn btn-warning">Warning</button>
-    <button type="button" class="btn btn-info">Info</button>
-    <button type="button" class="btn btn-light">Light</button>
-    <button type="button" class="btn btn-dark">Dark</button>
-
-    <button type="button" class="btn btn-link">Link</button>
+<img src="./img/ÑoñoBGV2.png" class="img-fluid" style="padding:0">
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="count" data-count="450">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Animes</small></p>
+                </div>
+            </div>
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="card-text count" data-count="250">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Mangas</small></p>
+                </div>
+            </div>
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="count" data-count="150">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Juegos</small></p>
+                </div>
+            </div>
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="count" data-count="450">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Series</small></p>
+                </div>
+            </div>
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="card-text count" data-count="250">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Peliculas</small></p>
+                </div>
+            </div>
+            <div class="card col-6 col-lg-2">
+                <div class="card-overlay text-center">
+                    <p class="count" data-count="150">0</p>
+                    <p class="card-text"><small class="text-body-secondary">Libros</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-@code{
-    IEnumerable<Usuario> usuEnum;
-    protected override async Task OnInitializedAsync()
-    {
-        usuEnum = await usuData.GetUsuarios();
-    }
+<script src="./js/PersonalScript.js"></script>
+
+
+@code {
+
 }

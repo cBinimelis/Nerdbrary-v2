@@ -20,6 +20,7 @@ builder.Services.AddScoped<IGeneroSerieData, GeneroSerieData>();
 builder.Services.AddScoped<IPeliculaData, PeliculaData>();
 builder.Services.AddScoped<IGeneroPeliculaData, GeneroPeliculaData>();
 builder.Services.AddScoped<IJuegoData, JuegoData>();
+builder.Services.AddScoped<IGeneroJuegoData, GeneroJuegoData>();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUsuarioData, UsuarioData>();
 
